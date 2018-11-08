@@ -12,7 +12,8 @@
     ],
     "require": {
         "php": "^5.4|^7.0",
-        "ext-intl": "*"
+        "ext-intl": "*",
+        "phing/phing": "^2.16"
     },
     "autoload": {
         "classmap": [
@@ -25,4 +26,3 @@
         }
     }
 }
-
