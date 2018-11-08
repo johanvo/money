@@ -1,6 +1,5 @@
 **This project has been abandoned.** It was only ever intended to be used as an example for PHPUnit features etc. and not for usage in production. I am sorry that I failed to make that clear. Please have a look at [moneyphp/money](https://github.com/moneyphp/money) instead.
 
-
 # Money
 
 [Value Object](http://martinfowler.com/bliki/ValueObject.html) that represents a [monetary value using a currency's smallest unit](http://martinfowler.com/eaaCatalog/money.html).
