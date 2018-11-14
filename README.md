@@ -1,7 +1,7 @@
 **This project has been abandoned.** It was only ever intended to be used as an example for PHPUnit features etc. and not for usage in production. I am sorry that I failed to make that clear. Please have a look at [moneyphp/money](https://github.com/moneyphp/money) instead.
 
-![Jenkins](https://img.shields.io/jenkins/s/http/jenkins.cd.omniboxx.com:8080/job/more_money.svg)
-![Jenkins](https://img.shields.io/jenkins/t/http/jenkins.cd.omniboxx.com:8080/job/more_money.svg)
+[![Jenkins](https://img.shields.io/jenkins/s/http/jenkins.cd.omniboxx.com:8080/job/more_money.svg)][http://jenkins.cd.omniboxx.com:8080/job/more_money/lastCompletedBuild/testReport/]
+[![Jenkins](https://img.shields.io/jenkins/t/http/jenkins.cd.omniboxx.com:8080/job/more_money.svg)][http://jenkins.cd.omniboxx.com:8080/job/more_money/lastCompletedBuild/testReport/]
 
 # Money
 
