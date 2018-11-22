@@ -27,7 +27,7 @@ pipeline {
                     tools: [[$class: 'JUnitType', pattern: 'build/logs/junit.xml']]
                 ])
                 publishHTML([allowMissing: false, alwaysLinkToLastBuild: false, keepAll: false, reportDir: 'build/coverage', reportFiles: 'index.html', reportName: 'Coverage Report', reportTitles: ''])
-                /* BROKEN step([$class: 'CloverPublisher', cloverReportDir: 'build/coverage', cloverReportFileName: 'build/logs/clover.xml']) */
+                step([$class: 'CloverPublisher', cloverReportDir: 'build/coverage', cloverReportFileName: 'build/logs/clover.xml'])
                 /* BROKEN step([$class: 'hudson.plugins.crap4j.Crap4JPublisher', reportPattern: 'build/logs/crap4j.xml', healthThreshold: '10']) */
             }
         }
@@ -51,7 +51,9 @@ pipeline {
                 pmd canRunOnFailed: true, pattern: 'build/logs/pmd.xml'
             }
         }
+        */
         stage('Software metrics') { steps { sh 'vendor/bin/pdepend --jdepend-xml=build/logs/jdepend.xml --jdepend-chart=build/pdepend/dependencies.svg --overview-pyramid=build/pdepend/overview-pyramid.svg --ignore=vendor .' } }
+        /* -- also SLOW?
         stage('Generate documentation') { steps { sh 'vendor/bin/phpdox -f build/phpdox.xml' } }
         */
     }
