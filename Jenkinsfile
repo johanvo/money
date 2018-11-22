@@ -21,8 +21,7 @@ pipeline {
         stage('Test'){
             steps {
                 sh 'vendor/bin/phpunit -c build/phpunit.xml || exit 0'
-                step([
-                    $class: 'XUnitBuilder',
+                step([$class: 'XUnitBuilder',
                     thresholds: [[$class: 'FailedThreshold', unstableThreshold: '1']],
                     tools: [[$class: 'JUnitType', pattern: 'build/logs/junit.xml']]
                 ])
