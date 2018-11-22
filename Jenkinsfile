@@ -4,8 +4,7 @@ pipeline {
     stages {
         stage('Prepare') {
             steps {
-                sh 'echo $PATH'
-                sh 'composer install'
+                sh '/home/jenkins/composer.phar install'
                 sh 'rm -rf build/api'
                 sh 'rm -rf build/coverage'
                 sh 'rm -rf build/logs'
@@ -18,7 +17,14 @@ pipeline {
                 sh 'mkdir build/phpdox'
             }
         }
-        stage('PHP Syntax check') { steps { sh 'vendor/bin/parallel-lint --exclude vendor/ .' } }
+        stage('PHP Syntax check') {
+            steps {
+                sh 'ls -l'
+                sh 'ls -l vendor/bin/'
+                sh 'vendor/bin/parallel-lint --exclude vendor/ .'
+            }
+        }
+        
         stage('Test'){
             steps {
                 sh 'vendor/bin/phpunit -c build/phpunit.xml || exit 0'
