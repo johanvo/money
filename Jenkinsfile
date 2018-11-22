@@ -25,8 +25,9 @@ pipeline {
                     thresholds: [[$class: 'FailedThreshold', unstableThreshold: '1']],
                     tools: [[$class: 'JUnitType', pattern: 'build/logs/junit.xml']]
                 )
-                publishHTML([allowMissing: false, alwaysLinkToLastBuild: false, keepAll: false, reportDir: 'build/coverage', reportFiles: 'index.html', reportName: 'Coverage Report', reportTitles: ''])
+                publishHTML([allowMissing: false, alwaysLinkToLastBuild: false, keepAll: false, reportDir: 'build/coverage', reportFiles: 'index.html', reportName: 'Coverage Report2', reportTitles: ''])
                 step([$class: 'CloverPublisher', cloverReportDir: 'build/coverage', cloverReportFileName: 'build/logs/clover.xml'])
+                step([$class: 'Mailer', notifyEveryUnstableBuild: true, recipients: '', sendToIndividuals: false])
                 /* BROKEN step([$class: 'hudson.plugins.crap4j.Crap4JPublisher', reportPattern: 'build/logs/crap4j.xml', healthThreshold: '10']) */
             }
         }
