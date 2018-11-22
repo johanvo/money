@@ -4,6 +4,7 @@ pipeline {
     stages {
         stage('Prepare') {
             steps {
+                sh 'echo $PATH'
                 sh 'composer install'
                 sh 'rm -rf build/api'
                 sh 'rm -rf build/coverage'
@@ -25,7 +26,6 @@ pipeline {
                     thresholds: [[$class: 'FailedThreshold', unstableThreshold: '1']],
                     tools: [[$class: 'JUnitType', pattern: 'build/logs/junit.xml']]
                 )
-                publishHTML([allowMissing: false, alwaysLinkToLastBuild: false, keepAll: false, reportDir: 'build/coverage', reportFiles: 'index.html', reportName: 'Coverage Report2', reportTitles: ''])
                 script {
                   publishHTML(target: [
                     allowMissing: false,
