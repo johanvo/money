@@ -13,8 +13,7 @@
     "require": {
         "php": "^5.4|^7.0",
         "ext-intl": "*",
-        "phing/phing": "^2.16",
-        "jakub-onderka/php-parallel-lint": "^1.0"
+        "phing/phing": "^2.16"
     },
     "autoload": {
         "classmap": [
