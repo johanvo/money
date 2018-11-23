@@ -4,8 +4,13 @@ pipeline {
     stages {
         stage('Prepare') {
             steps {
-                sh 'PATH=$PATH:/home/jenkins/.composer/vendor/bin'
-                sh 'echo $PATH'
+                // sh 'PATH=$PATH:/home/jenkins/.composer/vendor/bin'
+                // sh 'echo $PATH'
+                sh 'ls -l /home/jenkins'
+                sh 'ls -l /home/jenkins/.composer'
+                sh 'ls -l /home/jenkins/.composer/vendor'
+                sh 'ls -l /home/jenkins/.composer/vendor/bin'
+                sh 'ls -l /home/jenkins/vendor'
                 sh '/home/jenkins/composer.phar install'
                 sh 'rm -rf build/api'
                 sh 'rm -rf build/coverage'
