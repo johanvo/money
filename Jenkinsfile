@@ -4,10 +4,9 @@ pipeline {
     stages {
         stage('Prepare') {
             steps {
-                sh 'PATH=$PATH:/home/jenkins/vendor/bin/'
+                sh 'PATH=$PATH:/home/jenkins/vendor/bin/ && echo $PATH'
                 sh 'echo $PATH'
-                sh 'ls -l /home/jenkins'
-                sh 'ls -l /home/jenkins/vendor'
+                sh 'ls -al /home/jenkins'
                 sh '/home/jenkins/composer.phar install'
                 sh 'rm -rf build/api'
                 sh 'rm -rf build/coverage'
@@ -23,15 +22,13 @@ pipeline {
         }
         stage('PHP Syntax check') {
             steps {
-                sh 'ls -l'
-                sh 'ls -l vendor/bin/'
                 sh '/home/jenkins/vendor/bin/parallel-lint --exclude vendor/ .'
             }
         }
         
         stage('Test'){
             steps {
-                sh 'vendor/bin/phpunit -c build/phpunit.xml || exit 0'
+                sh 'phpunit -c build/phpunit.xml || exit 0'
                 step($class: 'XUnitBuilder',
                     thresholds: [[$class: 'FailedThreshold', unstableThreshold: '1']],
                     tools: [[$class: 'JUnitType', pattern: 'build/logs/junit.xml']]
