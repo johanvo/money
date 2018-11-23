@@ -22,7 +22,7 @@ pipeline {
             steps {
                 sh 'ls -l'
                 sh 'ls -l vendor/bin/'
-                sh 'vendor/bin/parallel-lint --exclude vendor/ .'
+                sh 'parallel-lint --exclude vendor/ .'
             }
         }
         
