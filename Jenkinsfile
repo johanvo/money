@@ -4,12 +4,9 @@ pipeline {
     stages {
         stage('Prepare') {
             steps {
-                // sh 'PATH=$PATH:/home/jenkins/.composer/vendor/bin'
-                // sh 'echo $PATH'
+                sh 'PATH=$PATH:/home/jenkins/vendor/bin/'
+                sh 'echo $PATH'
                 sh 'ls -l /home/jenkins'
-                sh 'ls -l /home/jenkins/.composer'
-                sh 'ls -l /home/jenkins/.composer/vendor'
-                sh 'ls -l /home/jenkins/.composer/vendor/bin'
                 sh 'ls -l /home/jenkins/vendor'
                 sh '/home/jenkins/composer.phar install'
                 sh 'rm -rf build/api'
@@ -28,7 +25,7 @@ pipeline {
             steps {
                 sh 'ls -l'
                 sh 'ls -l vendor/bin/'
-                sh '/home/jenkins/.composer/vendor/bin/parallel-lint --exclude vendor/ .'
+                sh '/home/jenkins/vendor/bin/parallel-lint --exclude vendor/ .'
             }
         }
         
