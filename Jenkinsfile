@@ -23,7 +23,7 @@ pipeline {
             steps {
                 sh 'ls -l'
                 sh 'ls -l vendor/bin/'
-                sh 'parallel-lint --exclude vendor/ .'
+                sh '/home/jenkins/.composer/vendor/bin/parallel-lint --exclude vendor/ .'
             }
         }
         
