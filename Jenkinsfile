@@ -40,8 +40,8 @@ pipeline {
                     keepAll: false,
                     reportDir: 'build/coverage',
                     reportFiles: 'index.html',
-                    reportTitles: "SimpleCov Report",
-                    reportName: "SimpleCov Report"
+                    reportTitles: "",
+                    reportName: "Coverage_Report"
                   ])
                 }
                 /* step([$class: 'CloverPublisher', cloverReportDir: 'build/coverage', cloverReportFileName: 'build/logs/clover.xml']) */
