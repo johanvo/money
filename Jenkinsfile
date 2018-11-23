@@ -4,6 +4,7 @@ pipeline {
     stages {
         stage('Prepare') {
             steps {
+                sh '/home/jenkins/composer.phar require jakub-onderka/php-parallel-lint'
                 sh '/home/jenkins/composer.phar install'
                 sh 'rm -rf build/api'
                 sh 'rm -rf build/coverage'
