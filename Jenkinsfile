@@ -28,7 +28,7 @@ pipeline {
         
         stage('Test'){
             steps {
-                sh 'phpunit -c build/phpunit.xml || exit 0'
+                sh '/home/jenkins/vendor/bin/phpunit -c build/phpunit.xml || exit 0'
                 step($class: 'XUnitBuilder',
                     thresholds: [[$class: 'FailedThreshold', unstableThreshold: '1']],
                     tools: [[$class: 'JUnitType', pattern: 'build/logs/junit.xml']]
@@ -45,20 +45,19 @@ pipeline {
                   ])
                 }
                 step([$class: 'CloverPublisher', cloverReportDir: 'build/coverage', cloverReportFileName: 'build/logs/clover.xml'])
-                step([$class: 'Mailer', notifyEveryUnstableBuild: true, recipients: '', sendToIndividuals: false])
                 /* BROKEN step([$class: 'hudson.plugins.crap4j.Crap4JPublisher', reportPattern: 'build/logs/crap4j.xml', healthThreshold: '10']) */
             }
         }
         stage('Checkstyle') {
             steps {
-                sh 'vendor/bin/phpcs --report=checkstyle --report-file=`pwd`/build/logs/checkstyle.xml --standard=PSR2 --extensions=php --ignore=autoload.php --ignore=vendor/ . || exit 0'
+                sh '/home/jenkins/vendor/bin/phpcs --report=checkstyle --report-file=`pwd`/build/logs/checkstyle.xml --standard=PSR2 --extensions=php --ignore=autoload.php --ignore=vendor/ . || exit 0'
                 checkstyle pattern: 'build/logs/checkstyle.xml'
             }
         }
-        stage('Lines of Code') { steps { sh 'vendor/bin/phploc --count-tests --exclude vendor/ --log-csv build/logs/phploc.csv --log-xml build/logs/phploc.xml .' } }
+        stage('Lines of Code') { steps { sh '/home/jenkins/vendor/bin/phploc --count-tests --exclude vendor/ --log-csv build/logs/phploc.csv --log-xml build/logs/phploc.xml .' } }
         stage('Copy paste detection') {
             steps {
-                sh 'vendor/bin/phpcpd --log-pmd build/logs/pmd-cpd.xml --exclude vendor . || exit 0'
+                sh '/home/jenkins/vendor/bin/phpcpd --log-pmd build/logs/pmd-cpd.xml --exclude vendor . || exit 0'
                 dry canRunOnFailed: true, pattern: 'build/logs/pmd-cpd.xml'
             }
         }
@@ -70,7 +69,7 @@ pipeline {
             }
         }
         */
-        stage('Software metrics') { steps { sh 'vendor/bin/pdepend --jdepend-xml=build/logs/jdepend.xml --jdepend-chart=build/pdepend/dependencies.svg --overview-pyramid=build/pdepend/overview-pyramid.svg --ignore=vendor .' } }
+        stage('Software metrics') { steps { sh '/home/jenkins/vendor/bin/pdepend --jdepend-xml=build/logs/jdepend.xml --jdepend-chart=build/pdepend/dependencies.svg --overview-pyramid=build/pdepend/overview-pyramid.svg --ignore=vendor .' } }
         /* -- also SLOW?
         stage('Generate documentation') { steps { sh 'vendor/bin/phpdox -f build/phpdox.xml' } }
         */
