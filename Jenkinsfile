@@ -54,8 +54,6 @@ pipeline {
                         )
                     ]
                 )
-                /* step([$class: 'CloverPublisher', cloverReportDir: 'build/coverage', cloverReportFileName: 'build/logs/clover.xml']) */
-                /* BROKEN step([$class: 'hudson.plugins.crap4j.Crap4JPublisher', reportPattern: 'build/logs/crap4j.xml', healthThreshold: '10']) */
             }
         }
         stage('Checkstyle') {
@@ -71,18 +69,7 @@ pipeline {
                 dry canRunOnFailed: true, pattern: 'build/logs/pmd-cpd.xml'
             }
         }
-        /* -- SLOW
-        stage('Mess detection') {
-            steps {
-                sh 'vendor/bin/phpmd . xml build/phpmd.xml --reportfile build/logs/pmd.xml --exclude vendor/ || exit 0'
-                pmd canRunOnFailed: true, pattern: 'build/logs/pmd.xml'
-            }
-        }
-        */
         stage('Software metrics') { steps { sh '/home/jenkins/vendor/bin/pdepend --jdepend-xml=build/logs/jdepend.xml --jdepend-chart=build/pdepend/dependencies.svg --overview-pyramid=build/pdepend/overview-pyramid.svg --ignore=vendor .' } }
-        /* -- also SLOW?
-        stage('Generate documentation') { steps { sh 'vendor/bin/phpdox -f build/phpdox.xml' } }
-        */
     }
         post {
         always {
