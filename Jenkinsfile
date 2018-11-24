@@ -29,7 +29,7 @@ pipeline {
         stage('Test'){
             steps {
                 sh '/home/jenkins/vendor/bin/phpunit -c build/phpunit.xml || exit 0'
-                xunit 
+                xunit {
                     thresholds: [
                         failed(
                             failureNewThreshold: '0', 
@@ -47,6 +47,7 @@ pipeline {
                             stopProcessingIfError: true
                         )
                     ]
+                }
                 script {
                   publishHTML(target: [
                     allowMissing: false,
