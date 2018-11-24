@@ -4,7 +4,7 @@ echo "Downloading plugins"
 for plugin in "$@"
 do
 	echo "  downloading $plugin"
-	curl -L https://updates.jenkins-ci.org/latest/ansicolor.hpi -o /tmp/WEB-INF/plugins/$plugin.hpi
+	curl -L https://updates.jenkins-ci.org/latest/$plugin.hpi -o /tmp/WEB-INF/plugins/$plugin.hpi
 done
 
 ls -l /tmp/WEB-INF/plugins/
