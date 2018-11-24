@@ -102,7 +102,8 @@ pipeline {
     post {
         always {
             junit 'build/logs/junit.xml'
-            archiveArtifacts './'
+            archiveArtifacts 'build/'
+            archiveArtifacts ''
         }
     }
 }
