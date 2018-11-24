@@ -89,4 +89,10 @@ pipeline {
         stage('Generate documentation') { steps { sh 'vendor/bin/phpdox -f build/phpdox.xml' } }
         */
     }
+        post {
+        always {
+            junit 'build/logs/junit.xml'
+            // archiveArtifacts 'build/coverage'
+        }
+    }
 }
