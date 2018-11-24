@@ -32,9 +32,15 @@ pipeline {
                 xunit (
                     thresholds: [
                         failed(
-                            failureNewThreshold: '0', 
-                            failureThreshold: '0', 
-                            unstableNewThreshold: '0', 
+                            failureNewThreshold: '0',
+                            failureThreshold: '0',
+                            unstableNewThreshold: '0',
+                            unstableThreshold: '0'
+                        ),
+                        skipped(
+                            failureNewThreshold: '0',
+                            failureThreshold: '0',
+                            unstableNewThreshold: '0',
                             unstableThreshold: '0'
                         )
                     ],
@@ -92,7 +98,6 @@ pipeline {
         post {
         always {
             junit 'build/logs/junit.xml'
-            // archiveArtifacts 'build/coverage'
         }
     }
 }
