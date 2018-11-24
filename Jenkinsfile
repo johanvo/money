@@ -54,17 +54,6 @@ pipeline {
                         )
                     ]
                 )
-                script {
-                  publishHTML(target: [
-                    allowMissing: false,
-                    alwaysLinkToLastBuild: false,
-                    keepAll: false,
-                    reportDir: 'build/coverage',
-                    reportFiles: 'index.html',
-                    reportTitles: "",
-                    reportName: "Coverage_Report"
-                  ])
-                }
                 /* step([$class: 'CloverPublisher', cloverReportDir: 'build/coverage', cloverReportFileName: 'build/logs/clover.xml']) */
                 /* BROKEN step([$class: 'hudson.plugins.crap4j.Crap4JPublisher', reportPattern: 'build/logs/crap4j.xml', healthThreshold: '10']) */
             }
