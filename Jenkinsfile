@@ -20,12 +20,13 @@ pipeline {
                 sh 'mkdir build/phpdox'
             }
         }
+
         stage('PHP Syntax check') {
             steps {
                 sh '/home/jenkins/vendor/bin/parallel-lint --exclude vendor/ .'
             }
         }
-        
+
         stage('Test'){
             steps {
                 sh '/home/jenkins/vendor/bin/phpunit -c build/phpunit.xml || exit 0'
@@ -56,22 +57,35 @@ pipeline {
                 )
             }
         }
+
         stage('Checkstyle') {
             steps {
                 sh '/home/jenkins/vendor/bin/phpcs --report=checkstyle --report-file=`pwd`/build/logs/checkstyle.xml --standard=PSR2 --extensions=php --ignore=autoload.php --ignore=vendor/ . || exit 0'
                 checkstyle pattern: 'build/logs/checkstyle.xml'
             }
         }
-        stage('Lines of Code') { steps { sh '/home/jenkins/vendor/bin/phploc --count-tests --exclude vendor/ --log-csv build/logs/phploc.csv --log-xml build/logs/phploc.xml .' } }
+
+        stage('Lines of Code') {
+            steps {
+                sh '/home/jenkins/vendor/bin/phploc --count-tests --exclude vendor/ --log-csv build/logs/phploc.csv --log-xml build/logs/phploc.xml .'
+            }
+        }
+
         stage('Copy paste detection') {
             steps {
                 sh '/home/jenkins/vendor/bin/phpcpd --log-pmd build/logs/pmd-cpd.xml --exclude vendor . || exit 0'
                 dry canRunOnFailed: true, pattern: 'build/logs/pmd-cpd.xml'
             }
         }
-        stage('Software metrics') { steps { sh '/home/jenkins/vendor/bin/pdepend --jdepend-xml=build/logs/jdepend.xml --jdepend-chart=build/pdepend/dependencies.svg --overview-pyramid=build/pdepend/overview-pyramid.svg --ignore=vendor .' } }
+
+        stage('Software metrics') {
+            steps {
+                sh '/home/jenkins/vendor/bin/pdepend --jdepend-xml=build/logs/jdepend.xml --jdepend-chart=build/pdepend/dependencies.svg --overview-pyramid=build/pdepend/overview-pyramid.svg --ignore=vendor .'
+            }
+        }
     }
-        post {
+
+    post {
         always {
             junit 'build/logs/junit.xml'
         }
