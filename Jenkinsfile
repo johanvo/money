@@ -28,27 +28,27 @@ pipeline {
       steps {
         sh '/home/jenkins/vendor/bin/phpunit -c build/phpunit.xml || exit 0'
         xunit(thresholds: [
-                                  failed(
-                                        failureNewThreshold: '0',
-                                        failureThreshold: '0',
-                                        unstableNewThreshold: '0',
-                                        unstableThreshold: '0'
-                                    ),
-                                    skipped(
-                                          failureNewThreshold: '0',
-                                          failureThreshold: '0',
-                                          unstableNewThreshold: '0',
-                                          unstableThreshold: '0'
-                                      )
-                                  ], tools: [
-                                        PHPUnit(
-                                              deleteOutputFiles: false, 
-                                              failIfNotNew: true, 
-                                              pattern: 'build/logs/junit.xml', 
-                                              skipNoTestFiles: true, 
-                                              stopProcessingIfError: true
-                                          )
-                                      ])
+                                            failed(
+                                                    failureNewThreshold: '0',
+                                                    failureThreshold: '0',
+                                                    unstableNewThreshold: '0',
+                                                    unstableThreshold: '0'
+                                                ),
+                                                skipped(
+                                                        failureNewThreshold: '0',
+                                                        failureThreshold: '0',
+                                                        unstableNewThreshold: '0',
+                                                        unstableThreshold: '0'
+                                                    )
+                                                ], tools: [
+                                                        PHPUnit(
+                                                                deleteOutputFiles: false, 
+                                                                failIfNotNew: true, 
+                                                                pattern: 'build/logs/junit.xml', 
+                                                                skipNoTestFiles: true, 
+                                                                stopProcessingIfError: true
+                                                            )
+                                                        ])
                   script {
                     publishHTML(target: [
                       allowMissing: false,
@@ -67,9 +67,8 @@ pipeline {
                 steps {
                   sh '/home/jenkins/vendor/bin/phpcs --report=checkstyle --report-file=`pwd`/build/logs/checkstyle.xml --standard=PSR2 --extensions=php --ignore=autoload.php --ignore=vendor/ . || exit 0'
                   echo 'pre'
-                  recordIssues(enabledForFailure: true, tools: [[tool: [$class: 'CheckStyle']]])
-                  echo 'post'
                   warnings(canComputeNew: true, canRunOnFailed: true)
+                  echo 'post'
                 }
               }
               stage('Lines of Code') {
