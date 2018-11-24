@@ -58,6 +58,17 @@ pipeline {
                         )
                     ]
                 )
+                script {
+                  publishHTML(target: [
+                    allowMissing: false,
+                    alwaysLinkToLastBuild: false,
+                    keepAll: true,
+                    reportDir: 'build/coverage',
+                    reportFiles: 'index.html',
+                    reportTitles: "",
+                    reportName: "Coverage_Report"
+                  ])
+                }
             }
         }
 
