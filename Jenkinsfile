@@ -66,6 +66,9 @@ pipeline {
                 // DEBUG
                 sh 'php -m'
                 sh 'php --help'
+                sh 'php --ri libxml'
+                sh 'php --ri xml'
+                sh 'php --rf simplexml_load_string'
                 sh 'php -r \'function_exists("simplexml_load_string")? "yes": "no";\''
                 
                 sh '/home/jenkins/vendor/bin/phpcs --report=checkstyle --report-file=`pwd`/build/logs/checkstyle.xml --standard=PSR2 --extensions=php --ignore=autoload.php --ignore=vendor/ . || exit 0'
