@@ -63,7 +63,7 @@ pipeline {
                     allowMissing: false,
                     alwaysLinkToLastBuild: false,
                     keepAll: true,
-                    reportDir: 'testdox/',
+                    reportDir: 'build/testdox/',
                     reportFiles: 'index.html',
                     reportTitles: "",
                     reportName: "testdox_Report"
