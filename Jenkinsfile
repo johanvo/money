@@ -9,8 +9,7 @@ pipeline {
                 sh 'echo $PATH'
                 sh 'ls -al /home/jenkins'
                 sh 'php -m'
-                sh 'php -r "echo json_encode(get_loaded_extensions());"'
-                sh 'php -r "echo json_encode(extension_loaded(\'xml\'));"'
+                sh 'php -r \'function_exists("simplexml_load_string")? echo "yes": "no"\''
                 
                 // normal commands
                 sh '/home/jenkins/composer.phar install'
