@@ -88,7 +88,7 @@ pipeline {
             }
       post {
         always {
-            archiveArtifacts '.'
+            archiveArtifacts 'src/'
         }
     }
 }
