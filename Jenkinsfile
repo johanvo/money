@@ -63,10 +63,10 @@ pipeline {
                     allowMissing: false,
                     alwaysLinkToLastBuild: false,
                     keepAll: true,
-                    reportDir: 'build/coverage',
+                    reportDir: 'testdox/',
                     reportFiles: 'index.html',
                     reportTitles: "",
-                    reportName: "Coverage_Report"
+                    reportName: "testdox_Report"
                   ])
                 }
             }
