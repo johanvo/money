@@ -46,7 +46,7 @@ pipeline {
                     ],
                     tools: [
                         PHPUnit(
-                            deleteOutputFiles: true, 
+                            deleteOutputFiles: false, 
                             failIfNotNew: true, 
                             pattern: 'build/logs/junit.xml', 
                             skipNoTestFiles: true, 
