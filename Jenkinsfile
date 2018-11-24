@@ -29,25 +29,7 @@ pipeline {
         stage('Test'){
             steps {
                 sh '/home/jenkins/vendor/bin/phpunit -c build/phpunit.xml || exit 0'
-                xunit {
-                    thresholds: [
-                        failed(
-                            failureNewThreshold: '0', 
-                            failureThreshold: '0', 
-                            unstableNewThreshold: '0', 
-                            unstableThreshold: '0'
-                        )
-                    ],
-                    tools: [
-                        PHPUnit(
-                            deleteOutputFiles: true, 
-                            failIfNotNew: true, 
-                            pattern: 'build/logs/junit.xml', 
-                            skipNoTestFiles: true, 
-                            stopProcessingIfError: true
-                        )
-                    ]
-                }
+                xunit thresholds: [failed(failureNewThreshold: '0', failureThreshold: '0', unstableNewThreshold: '0', unstableThreshold: '0')], tools: [PHPUnit(deleteOutputFiles: true, failIfNotNew: true, pattern: 'build/logs/junit.xml', skipNoTestFiles: true, stopProcessingIfError: true)]
                 script {
                   publishHTML(target: [
                     allowMissing: false,
