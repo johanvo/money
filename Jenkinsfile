@@ -9,7 +9,7 @@ pipeline {
                 sh 'echo $PATH'
                 sh 'ls -al /home/jenkins'
                 sh 'php -m'
-                sh 'php -r \'function_exists("simplexml_load_string")? "yes": "no"\''
+                sh 'php -r \'function_exists("simplexml_load_string")? "yes": "no";\''
                 
                 // normal commands
                 sh '/home/jenkins/composer.phar install'
