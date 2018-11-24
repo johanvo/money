@@ -57,7 +57,7 @@ pipeline {
                       reportDir: 'build/testdox/',
                       reportFiles: 'index.html',
                       reportTitles: "",
-                      reportName: "testdox_Report"
+                      reportName: "Testdox Report"
                     ])
                   }
 
