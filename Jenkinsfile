@@ -102,7 +102,7 @@ pipeline {
     post {
         always {
             junit 'build/logs/junit.xml'
-            recordIssues enabledForFailure: true, tools: [[tool: [$class: 'CheckStyle']]]
+            archiveArtifacts './'
         }
     }
 }
