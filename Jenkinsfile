@@ -73,14 +73,12 @@ pipeline {
         }
 
         stage('Checkstyle') {
-            steps {
-                sh '/home/jenkins/vendor/bin/phpcs --report=checkstyle --report-file=`pwd`/build/logs/checkstyle.xml --standard=PSR2 --extensions=php --ignore=autoload.php --ignore=vendor/ . || exit 0'
-                // checkstyle pattern: 'build/logs/checkstyle.xml'
-                echo(message: 'pre')
-                def checkstyle = scanForIssues tool: [$class: 'CheckStyle'], pattern: 'build/logs/checkstyle.xml'
-                publishIssues issues:[checkstyle]
-                echo(message: 'post')
-            }
+            sh '/home/jenkins/vendor/bin/phpcs --report=checkstyle --report-file=`pwd`/build/logs/checkstyle.xml --standard=PSR2 --extensions=php --ignore=autoload.php --ignore=vendor/ . || exit 0'
+            // checkstyle pattern: 'build/logs/checkstyle.xml'
+            echo(message: 'pre')
+            def checkstyle = scanForIssues tool: [$class: 'CheckStyle'], pattern: 'build/logs/checkstyle.xml'
+            publishIssues issues:[checkstyle]
+            echo(message: 'post')
         }
 
         stage('Lines of Code') {
