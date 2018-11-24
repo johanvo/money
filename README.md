@@ -1,7 +1,7 @@
 **This project is for testing only.** 
 
-[![Jenkins](https://img.shields.io/jenkins/s/http/jenkins.cd.omniboxx.com:8080/job/more_money.svg)](http://jenkins.cd.omniboxx.com:8080/job/more_money/lastCompletedBuild/testReport/)
-[![Jenkins](https://img.shields.io/jenkins/t/http/jenkins.cd.omniboxx.com:8080/job/more_money.svg)](http://jenkins.cd.omniboxx.com:8080/job/more_money/lastCompletedBuild/testReport/)
+[![Jenkins](https://img.shields.io/jenkins/s/http/jenkins.cd.omniboxx.com:8080/job/money.svg)](http://jenkins.cd.omniboxx.com:8080/job/money/job/master/lastBuild/)
+[![Jenkins](https://img.shields.io/jenkins/t/http/jenkins.cd.omniboxx.com:8080/job/money.svg)](http://jenkins.cd.omniboxx.com:8080/job/money/lastCompletedBuild/testReport/)
 
 # Money
 
