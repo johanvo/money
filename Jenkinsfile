@@ -4,9 +4,15 @@ pipeline {
     stages {
         stage('Prepare') {
             steps {
+                // debug
                 sh 'PATH=$PATH:/home/jenkins/vendor/bin/ && echo $PATH'
                 sh 'echo $PATH'
                 sh 'ls -al /home/jenkins'
+                sh 'php -m'
+                sh 'php -r echo get_loaded_extensions();'
+                sh 'php -r echo extension_loaded("xml");'
+                
+                // normal commands
                 sh '/home/jenkins/composer.phar install'
                 sh 'rm -rf build/api'
                 sh 'rm -rf build/coverage'
