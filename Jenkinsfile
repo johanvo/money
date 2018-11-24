@@ -64,6 +64,7 @@ pipeline {
         stage('Checkstyle') {
             steps {
                 sh '/home/jenkins/vendor/bin/phpcs --report=checkstyle --report-file=`pwd`/build/logs/checkstyle.xml --standard=PSR2 --extensions=php --ignore=autoload.php --ignore=vendor/ . || exit 0'
+                checkstyle pattern: 'build/logs/checkstyle.xml'
             }
         }
 
@@ -90,7 +91,7 @@ pipeline {
     post {
         always {
             junit 'build/logs/junit.xml'
-            checkstyle pattern: 'build/logs/checkstyle.xml'
+            recordIssues enabledForFailure: true, tools: [[tool: [$class: 'CheckStyle']]]
         }
     }
 }
