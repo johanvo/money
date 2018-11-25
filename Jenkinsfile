@@ -91,7 +91,15 @@ pipeline {
             }
       post {
         always {
-            recordIssues aggregatingResults: true, enabledForFailure: true, tools: [[id: 'checkstyle-uniq-id', pattern: 'build/logs/checkstyle.xml', tool: checkStyle()], [id: 'php-cpd-uniq-id', pattern: 'build/logs/pmd-cpd.xml', tool: cpd()], [id: 'pmd-uniq-id', pattern: 'build/logs/pmd.xml', tool: pmd()]]
+            recordIssues (
+              aggregatingResults: true,
+              enabledForFailure: true,
+              tools: [
+                [id: 'checkstyle-uniq-id', pattern: 'build/logs/checkstyle.xml', tool: checkStyle()],
+                [id: 'php-cpd-uniq-id', pattern: 'build/logs/pmd-cpd.xml', tool: cpd()],
+                [id: 'pmd-uniq-id', pattern: 'build/logs/pmd.xml', tool: [$class: 'Pmd']]
+              ]
+            )
             archiveArtifacts 'src/'
         }
     }
