@@ -49,18 +49,6 @@ pipeline {
                                 stopProcessingIfError: true
                         )
                 ])
-                script {
-                    publishHTML(target: [
-                            allowMissing         : false,
-                            alwaysLinkToLastBuild: false,
-                            keepAll              : true,
-                            reportDir            : 'build/testdox/',
-                            reportFiles          : 'index.html',
-                            reportTitles         : "",
-                            reportName           : "Testdox Report"
-                    ])
-                }
-
             }
         }
         stage('Checkstyle') {
