@@ -122,10 +122,18 @@ pipeline {
                     baseUrl: 'https://queepjes.slack.com/services/hooks/jenkins-ci/',
                     channel: '#random',
                     color: 'good',
-                    message: "successfully finished ${env.JOB_NAME} ${env.BUILD_NUMBER} (<${env.BUILD_URL}|Open>)",
+                    message: "successfully finished ${env.JOB_NAME} ${env.BUILD_NUMBER} (<${env.BUILD_URL}|details>)",
                     token: 'TtRWVQlN5ABkGPJobVrsbgKH'
             )
-
+        }
+        failure {
+            slackSend(
+                    baseUrl: 'https://queepjes.slack.com/services/hooks/jenkins-ci/',
+                    channel: '#random',
+                    color: 'danger',
+                    message: "job ${env.JOB_NAME} ${env.BUILD_NUMBER} FAILED (<${env.BUILD_URL}|details>)",
+                    token: 'TtRWVQlN5ABkGPJobVrsbgKH'
+            )
         }
     }
 }
