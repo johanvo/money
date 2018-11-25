@@ -6,7 +6,6 @@ pipeline {
     stages {
         stage('Prepare') {
             steps {
-                sh 'echo $PATH'
                 sh 'ls -al /home/jenkins'
                 sh '/home/jenkins/composer.phar install'
                 sh 'rm -rf build/api'
@@ -23,12 +22,12 @@ pipeline {
         }
         stage('PHP Syntax check') {
             steps {
-                sh '/home/jenkins/vendor/bin/parallel-lint --exclude vendor/ .'
+                sh 'parallel-lint --exclude vendor/ .'
             }
         }
         stage('Test') {
             steps {
-                sh '/home/jenkins/vendor/bin/phpunit -c build/phpunit.xml || exit 0'
+                sh 'phpunit -c build/phpunit.xml || exit 0'
                 xunit(thresholds: [
                         failed(
                                 failureNewThreshold: '0',
@@ -55,27 +54,27 @@ pipeline {
         }
         stage('Checkstyle') {
             steps {
-                sh '/home/jenkins/vendor/bin/phpcs --report=checkstyle --report-file=`pwd`/build/logs/checkstyle.xml --standard=PSR2 --extensions=php --ignore=autoload.php,vendor/* . || exit 0'
+                sh 'phpcs --report=checkstyle --report-file=`pwd`/build/logs/checkstyle.xml --standard=PSR2 --extensions=php --ignore=autoload.php,vendor/* . || exit 0'
             }
         }
         stage('Lines of Code') {
             steps {
-                sh '/home/jenkins/vendor/bin/phploc --count-tests --exclude vendor/ --log-csv build/logs/phploc.csv --log-xml build/logs/phploc.xml .'
+                sh 'phploc --count-tests --exclude vendor/ --log-csv build/logs/phploc.csv --log-xml build/logs/phploc.xml .'
             }
         }
         stage('Copy paste detection') {
             steps {
-                sh '/home/jenkins/vendor/bin/phpcpd --log-pmd build/logs/pmd-cpd.xml --exclude vendor . || exit 0'
+                sh 'phpcpd --log-pmd build/logs/pmd-cpd.xml --exclude vendor . || exit 0'
             }
         }
         stage('Software metrics') {
             steps {
-                sh '/home/jenkins/vendor/bin/pdepend --jdepend-xml=build/logs/jdepend.xml --jdepend-chart=build/pdepend/dependencies.svg --overview-pyramid=build/pdepend/overview-pyramid.svg --ignore=vendor .'
+                sh 'pdepend --jdepend-xml=build/logs/jdepend.xml --jdepend-chart=build/pdepend/dependencies.svg --overview-pyramid=build/pdepend/overview-pyramid.svg --ignore=vendor .'
             }
         }
         stage('Mess detection') {
             steps {
-                sh '/home/jenkins/vendor/bin/phpmd . xml build/phpmd.xml --reportfile build/logs/pmd.xml --exclude vendor/ || exit 0'
+                sh 'phpmd . xml build/phpmd.xml --reportfile build/logs/pmd.xml --exclude vendor/ || exit 0'
             }
         }
     }
