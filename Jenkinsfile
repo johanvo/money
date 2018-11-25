@@ -67,11 +67,7 @@ pipeline {
                 steps {
                   sh '/home/jenkins/vendor/bin/phpcs --report=checkstyle --report-file=`pwd`/build/logs/checkstyle.xml --standard=PSR2 --extensions=php --ignore=autoload.php,vendor/* . || exit 0'
                   // checkstyle pattern: 'build/logs/checkstyle.xml'
-                  recordIssues (
-                    enabledForFailure: true,
-                    pattern: 'build/logs/checkstyle.xml',
-                    tools: [[tool: [$class: 'CheckStyle']]]
-                  )
+                  recordIssues aggregatingResults: true, enabledForFailure: true, tools: [[id: 'checkstyle-uniq-id', pattern: 'build/logs/checkstyle.xml', tool: checkStyle()]]
                 }
               }
               stage('Lines of Code') {
