@@ -118,6 +118,14 @@ pipeline {
                             )
                     ]
             )
+            slackSend(
+                    baseUrl: 'https://queepjes.slack.com/services/hooks/jenkins-ci/',
+                    channel: '#random',
+                    color: 'good',
+                    message: 'SUCCESS',
+                    token: 'TtRWVQlN5ABkGPJobVrsbgKH'
+            )
+
         }
     }
 }
