@@ -109,7 +109,7 @@ pipeline {
                                                     remoteDirectory: 'var/www',
                                                     remoteDirectorySDF: false,
                                                     removePrefix: '',
-                                                    sourceFiles: '/src'
+                                                    sourceFiles: 'src/'
                                             )
                                     ],
                                     usePromotionTimestamp: false,
