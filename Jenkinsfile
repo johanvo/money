@@ -1,9 +1,11 @@
 pipeline {
     agent any
+    environment {
+        PATH = "$PATH:/home/jenkins/vendor/bin/"
+    }
     stages {
         stage('Prepare') {
             steps {
-                sh 'PATH=$PATH:/home/jenkins/vendor/bin/ && echo $PATH'
                 sh 'echo $PATH'
                 sh 'ls -al /home/jenkins'
                 sh '/home/jenkins/composer.phar install'
