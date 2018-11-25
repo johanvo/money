@@ -158,8 +158,6 @@ class Money implements \JsonSerializable
         $this->assertSameCurrency($this, $other);
 
         $value = $this->amount + $other->getAmount();
-        
-        $value = $value = $value = $value = $value = $value = $value = $value = $value = $value = $value = $value = $value = $value = $value = $value;
 
         $this->assertIsInteger($value);
 
