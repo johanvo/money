@@ -122,7 +122,7 @@ pipeline {
                     baseUrl: 'https://queepjes.slack.com/services/hooks/jenkins-ci/',
                     channel: '#random',
                     color: 'good',
-                    message: 'SUCCESS',
+                    message: 'successfully finished ${env.JOB_NAME} ${env.BUILD_NUMBER} (<${env.BUILD_URL}|Open>)"',
                     token: 'TtRWVQlN5ABkGPJobVrsbgKH'
             )
 
