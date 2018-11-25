@@ -91,5 +91,33 @@ pipeline {
             )
             archiveArtifacts 'src/'
         }
+        success {
+            sshPublisher(
+                    publishers: [
+                            sshPublisherDesc(
+                                    configName: 'zelluf',
+                                    transfers: [
+                                            sshTransfer(
+                                                    cleanRemote: false,
+                                                    excludes: '',
+                                                    execCommand: '',
+                                                    execTimeout: 120000,
+                                                    flatten: false,
+                                                    makeEmptyDirs: false,
+                                                    noDefaultExcludes: false,
+                                                    patternSeparator: '[, ]+',
+                                                    remoteDirectory: 'var/www',
+                                                    remoteDirectorySDF: false,
+                                                    removePrefix: '',
+                                                    sourceFiles: '/src'
+                                            )
+                                    ],
+                                    usePromotionTimestamp: false,
+                                    useWorkspaceInPromotion: false,
+                                    verbose: false
+                            )
+                    ]
+            )
+        }
     }
 }
