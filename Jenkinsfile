@@ -66,8 +66,6 @@ pipeline {
               stage('Checkstyle') {
                 steps {
                   sh '/home/jenkins/vendor/bin/phpcs --report=checkstyle --report-file=`pwd`/build/logs/checkstyle.xml --standard=PSR2 --extensions=php --ignore=autoload.php,vendor/* . || exit 0'
-                  // checkstyle pattern: 'build/logs/checkstyle.xml'
-                  recordIssues aggregatingResults: true, enabledForFailure: true, tools: [[id: 'checkstyle-uniq-id', pattern: 'build/logs/checkstyle.xml', tool: checkStyle()]]
                 }
               }
               stage('Lines of Code') {
@@ -78,7 +76,6 @@ pipeline {
               stage('Copy paste detection') {
                 steps {
                   sh '/home/jenkins/vendor/bin/phpcpd --log-pmd build/logs/pmd-cpd.xml --exclude vendor . || exit 0'
-                  dry(canRunOnFailed: true, pattern: 'build/logs/pmd-cpd.xml')
                 }
               }
               stage('Software metrics') {
@@ -86,9 +83,15 @@ pipeline {
                   sh '/home/jenkins/vendor/bin/pdepend --jdepend-xml=build/logs/jdepend.xml --jdepend-chart=build/pdepend/dependencies.svg --overview-pyramid=build/pdepend/overview-pyramid.svg --ignore=vendor .'
                 }
               }
+              stage('Mess detection') {
+                steps {
+                  sh '/home/jenkins/vendor/bin/phpmd . xml build/phpmd.xml --reportfile build/logs/pmd.xml --exclude vendor/ || exit 0'
+                }
+              }
             }
       post {
         always {
+            recordIssues aggregatingResults: true, enabledForFailure: true, tools: [[id: 'checkstyle-uniq-id', pattern: 'build/logs/checkstyle.xml', tool: checkStyle()], [id: 'php-cpd-uniq-id', pattern: 'build/logs/pmd-cpd.xml', tool: cpd()], [id: 'pmd-uniq-id', pattern: 'build/logs/pmd.xml', tool: pmd()]]
             archiveArtifacts 'src/'
         }
     }
