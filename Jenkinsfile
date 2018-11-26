@@ -77,6 +77,39 @@ pipeline {
                 sh 'phpmd . xml build/phpmd.xml --reportfile build/logs/pmd.xml --exclude vendor/ || exit 0'
             }
         }
+
+        stage('Deliver') {
+            steps {
+                sshPublisher(
+                        publishers: [
+                                sshPublisherDesc(
+                                        configName: 'zelluf',
+                                        transfers: [
+                                                sshTransfer(
+                                                        cleanRemote: false,
+                                                        excludes: '',
+                                                        execTimeout: 120000,
+                                                        flatten: false,
+                                                        makeEmptyDirs: false,
+                                                        noDefaultExcludes: false,
+                                                        patternSeparator: '[, ]+',
+                                                        remoteDirectory: "srv/www/git/${currentBuild.projectName}/$BUILD_TAG",
+                                                        remoteDirectorySDF: false,
+                                                        removePrefix: 'src',
+                                                        sourceFiles: 'src/',
+                                                        execCommand: "cd srv/www " +
+                                                                "&& rm -f $GIT_BRANCH" +
+                                                                "&& ln -s git/${currentBuild.projectName}/$BUILD_TAG $GIT_BRANCH"
+                                                )
+                                        ],
+                                        usePromotionTimestamp: false,
+                                        useWorkspaceInPromotion: false,
+                                        verbose: false
+                                )
+                        ]
+                )
+            }
+        }
     }
     post {
         always {
@@ -92,34 +125,6 @@ pipeline {
             archiveArtifacts 'src/'
         }
         success {
-            sshPublisher(
-                    publishers: [
-                            sshPublisherDesc(
-                                    configName: 'zelluf',
-                                    transfers: [
-                                            sshTransfer(
-                                                    cleanRemote: false,
-                                                    excludes: '',
-                                                    execTimeout: 120000,
-                                                    flatten: false,
-                                                    makeEmptyDirs: false,
-                                                    noDefaultExcludes: false,
-                                                    patternSeparator: '[, ]+',
-                                                    remoteDirectory: "srv/www/git/${currentBuild.projectName}/$BUILD_TAG",
-                                                    remoteDirectorySDF: false,
-                                                    removePrefix: 'src',
-                                                    sourceFiles: 'src/',
-                                                    execCommand: "cd srv/www " +
-                                                            "&& rm -f $GIT_BRANCH" +
-                                                            "&& ln -s git/${currentBuild.projectName}/$BUILD_TAG $GIT_BRANCH"
-                                            )
-                                    ],
-                                    usePromotionTimestamp: false,
-                                    useWorkspaceInPromotion: false,
-                                    verbose: false
-                            )
-                    ]
-            )
             slackSend(
                     baseUrl: 'https://queepjes.slack.com/services/hooks/jenkins-ci/',
                     channel: '#random',
