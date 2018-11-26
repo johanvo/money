@@ -100,16 +100,18 @@ pipeline {
                                             sshTransfer(
                                                     cleanRemote: false,
                                                     excludes: '',
-                                                    execCommand: '',
                                                     execTimeout: 120000,
                                                     flatten: false,
                                                     makeEmptyDirs: false,
                                                     noDefaultExcludes: false,
                                                     patternSeparator: '[, ]+',
-                                                    remoteDirectory: "var/www/$GIT_BRANCH",
+                                                    remoteDirectory: "srv/www/git/${currentBuild.projectName}/$BUILD_TAG",
                                                     remoteDirectorySDF: false,
                                                     removePrefix: 'src',
-                                                    sourceFiles: 'src/'
+                                                    sourceFiles: 'src/',
+                                                    execCommand: "cd srv/www " +
+                                                            "&& rm -f $GIT_BRANCH" +
+                                                            "&& ln -s git/${currentBuild.projectName}/$BUILD_TAG $GIT_BRANCH"
                                             )
                                     ],
                                     usePromotionTimestamp: false,
