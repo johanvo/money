@@ -106,9 +106,9 @@ pipeline {
                                                     makeEmptyDirs: false,
                                                     noDefaultExcludes: false,
                                                     patternSeparator: '[, ]+',
-                                                    remoteDirectory: 'var/www',
+                                                    remoteDirectory: "var/www/$GIT_BRANCH",
                                                     remoteDirectorySDF: false,
-                                                    removePrefix: '',
+                                                    removePrefix: 'src',
                                                     sourceFiles: 'src/'
                                             )
                                     ],
