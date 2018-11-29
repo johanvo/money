@@ -19,7 +19,7 @@ pipeline {
                 sh 'mkdir build/pdepend'
                 sh 'mkdir build/phpdox'
                 sh 'mkdir build/phpmetrics'
-                sh 'wget https://github.com/phpmetrics/PhpMetrics/blob/master/build/phpmetrics.phar'
+                sh 'wget https://github.com/phpmetrics/PhpMetrics/blob/master/build/phpmetrics.phar?raw=true -Ophpmetrics.phar'
             }
         }
 
@@ -77,11 +77,11 @@ pipeline {
                         sh 'pdepend --jdepend-xml=build/logs/jdepend.xml --jdepend-chart=build/pdepend/dependencies.svg --overview-pyramid=build/pdepend/overview-pyramid.svg --ignore=vendor .'
                     }
                 }
-                 stage('Mess detection') {
-                     steps {
-                         sh 'phpmd . xml build/phpmd.xml --reportfile build/logs/pmd.xml --exclude vendor/ || exit 0'
-                     }
-                 }
+                stage('Mess detection') {
+                    steps {
+                        sh 'phpmd . xml build/phpmd.xml --reportfile build/logs/pmd.xml --exclude vendor/ || exit 0'
+                    }
+                }
             }
         }
 
