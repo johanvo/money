@@ -85,6 +85,17 @@ pipeline {
                 stage('PHP Metrics') {
                     steps {
                         sh 'php phpmetrics.phar --report-html=build/phpmetrics/phpmetrics.html --report-xml=build/phpmetrics/phpmetrics.xml --violations-xml=build/phpmetrics/violations.xml src/ || exit 0'
+                        script {
+                            publishHTML(target: [
+                                    allowMissing         : false,
+                                    alwaysLinkToLastBuild: false,
+                                    keepAll              : true,
+                                    reportDir            : 'build/phpmetrics/',
+                                    reportFiles          : '*',
+                                    reportTitles         : "",
+                                    reportName           : "PhpMetrics"
+                            ])
+                        }
                     }
                 }
             }
