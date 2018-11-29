@@ -19,7 +19,7 @@ pipeline {
                 sh 'mkdir build/pdepend'
                 sh 'mkdir build/phpdox'
                 sh 'mkdir build/phpmetrics'
-                sh 'wget https://github.com/phpmetrics/PhpMetrics/raw/master/build/phpmetrics.phar'
+                sh 'wget https://github.com/phpmetrics/PhpMetrics/blob/master/build/phpmetrics.phar'
             }
         }
 
@@ -87,6 +87,12 @@ pipeline {
 
         stage('PHP Metrics') {
             parallel {
+                stage('Version') {
+                    sh 'php phpmetrics.phar --version'
+                }
+                stage('Help') {
+                    sh 'php phpmetrics.phar --help'
+                }
                 stage('Html report') {
                     steps {
                         sh 'php phpmetrics.phar --junit=build/logs/junit.xml --report-html=build/phpmetrics/ ./'
