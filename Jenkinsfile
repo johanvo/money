@@ -96,6 +96,20 @@ pipeline {
                                     reportName           : "PhpMetrics"
                             ])
                         }
+                        plot (
+                                csvFileName: 'phpmetrics-maintainability.csv',
+                                group: 'Maintainability index',
+                                style: 'line',
+                                title: 'Maintainability index',
+                                xmlSeries: [
+                                        [
+                                                file: 'build/phpmetrics/phpmetrics.xml',
+                                                nodeType: 'NUMBER',
+                                                url: '',
+                                                xpath: 'number(//project/@maintabilityIndex)'
+                                        ]
+                                ]
+                        )
                     }
                 }
             }
