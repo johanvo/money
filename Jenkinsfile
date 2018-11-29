@@ -84,7 +84,9 @@ pipeline {
                 }
                 stage('PHP Metrics') {
                     steps {
-                        sh 'php phpmetrics.phar --report-html=build/phpmetrics/phpmetrics.html --report-xml=build/phpmetrics-phpmetrics.xml --violations-xml=build/phpmetrics-violations.xml ./ || exit 0'
+                        sh 'php phpmetrics.phar --report-html=build/phpmetrics/phpmetrics.html ./ || exit 0'
+                        sh 'php phpmetrics.phar --report-xml=build/phpmetrics.xml --violations-xml=build/phpmetrics-violations.xml ./ || exit 0'
+                        sh 'php phpmetrics.phar --violations-xml=build/phpmetrics-violations.xml ./ || exit 0'
                         script {
                             publishHTML(target: [
                                     allowMissing         : false,
