@@ -88,10 +88,14 @@ pipeline {
         stage('PHP Metrics') {
             parallel {
                 stage('Version') {
-                    sh 'php phpmetrics.phar --version'
+                    steps {
+                        sh 'php phpmetrics.phar --version'
+                    }
                 }
                 stage('Help') {
-                    sh 'php phpmetrics.phar --help'
+                    steps {
+                        sh 'php phpmetrics.phar --help'
+                    }
                 }
                 stage('Html report') {
                     steps {
