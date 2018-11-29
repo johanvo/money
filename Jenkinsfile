@@ -18,6 +18,8 @@ pipeline {
                 sh 'mkdir build/logs'
                 sh 'mkdir build/pdepend'
                 sh 'mkdir build/phpdox'
+                sh 'mkdir build/phpmetrics'
+                sh 'wget https://github.com/phpmetrics/PhpMetrics/raw/master/build/phpmetrics.phar'
             }
         }
 
@@ -80,6 +82,11 @@ pipeline {
                         sh 'phpmd . xml build/phpmd.xml --reportfile build/logs/pmd.xml --exclude vendor/ || exit 0'
                     }
                 }
+                stage('PHP Metrics') {
+                    steps {
+                        sh 'php phpmetrics.phar --report-html=build/phpmetrics/phpmetrics.html --report-xml=build/phpmetrics/phpmetrics.xml --violations-xml=build/phpmetrics/violations.xml || exit 0'
+                    }
+                }
             }
         }
 
@@ -128,6 +135,7 @@ pipeline {
                     ]
             )
             archiveArtifacts 'src/'
+            archiveArtifacts 'build/phpmetrics/'
         }
         success {
             slackSend(
