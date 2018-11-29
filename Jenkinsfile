@@ -84,7 +84,7 @@ pipeline {
                 }
                 stage('PHP Metrics') {
                     steps {
-                        sh 'php phpmetrics.phar --report-html=build/phpmetrics/phpmetrics.html --report-xml=build/phpmetrics/phpmetrics.xml --violations-xml=build/phpmetrics/violations.xml ./ || exit 0'
+                        sh 'php phpmetrics.phar --report-html=build/phpmetrics/phpmetrics.html --report-xml=build/phpmetrics-phpmetrics.xml --violations-xml=build/phpmetrics-violations.xml ./ || exit 0'
                         script {
                             publishHTML(target: [
                                     allowMissing         : false,
@@ -160,7 +160,7 @@ pipeline {
                     ]
             )
             archiveArtifacts 'src/'
-            archiveArtifacts 'build/phpmetrics/'
+            archiveArtifacts 'build/'
         }
         success {
             slackSend(
