@@ -77,16 +77,19 @@ pipeline {
                         sh 'pdepend --jdepend-xml=build/logs/jdepend.xml --jdepend-chart=build/pdepend/dependencies.svg --overview-pyramid=build/pdepend/overview-pyramid.svg --ignore=vendor .'
                     }
                 }
-                stage('Mess detection') {
+                 stage('Mess detection') {
+                     steps {
+                         sh 'phpmd . xml build/phpmd.xml --reportfile build/logs/pmd.xml --exclude vendor/ || exit 0'
+                     }
+                 }
+            }
+        }
+
+        stage('PHP Metrics') {
+            parallel {
+                stage('Html report') {
                     steps {
-                        sh 'phpmd . xml build/phpmd.xml --reportfile build/logs/pmd.xml --exclude vendor/ || exit 0'
-                    }
-                }
-                stage('PHP Metrics') {
-                    steps {
-                        sh 'php phpmetrics.phar --report-html=build/phpmetrics/ ./ || exit 0'
-                        sh 'php phpmetrics.phar --report-xml=build/phpmetrics.xml --violations-xml=build/phpmetrics-violations.xml ./ || exit 0'
-                        sh 'php phpmetrics.phar --violations-xml=build/phpmetrics-violations.xml ./ || exit 0'
+                        sh 'php phpmetrics.phar --junit=build/logs/junit.xml --report-html=build/phpmetrics/ ./'
                         script {
                             publishHTML(target: [
                                     allowMissing         : false,
@@ -98,6 +101,11 @@ pipeline {
                                     reportName           : "PhpMetrics"
                             ])
                         }
+                    }
+                }
+                stage('Xml report') {
+                    steps {
+                        sh 'php phpmetrics.phar --report-xml=build/logs/phpmetrics.xml ./'
                         plot (
                                 csvFileName: 'phpmetrics-maintainability.csv',
                                 group: 'Maintainability index',
@@ -105,7 +113,7 @@ pipeline {
                                 title: 'Maintainability index',
                                 xmlSeries: [
                                         [
-                                                file: 'build/phpmetrics/phpmetrics.xml',
+                                                file: 'build/log/phpmetrics.xml',
                                                 nodeType: 'NUMBER',
                                                 url: '',
                                                 xpath: 'number(//project/@maintabilityIndex)'
@@ -114,6 +122,12 @@ pipeline {
                         )
                     }
                 }
+                stage('Violations report') {
+                    steps {
+                        sh 'php phpmetrics.phar --report-violations=build/logs/phpmetrics-violations.xml ./'
+                    }
+                }
+
             }
         }
 
