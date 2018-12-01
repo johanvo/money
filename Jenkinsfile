@@ -30,8 +30,17 @@ pipeline {
                     }
                 }
                 stage('Test') {
+                    agent {
+                        label 'do-the-thing'
+                    }
                     steps {
-                        sh 'phpunit -c build/phpunit.xml || exit 0'
+                        sh 'docker run -u `id -u`:`id -g` -v $(pwd):/app --rm phpunit/phpunit -c /build/phpunit.xml'
+                        sh 'ls -l build'
+                        sh 'ls -l build/logs'
+                        stash (
+                                name: 'phpunit_output',
+                                includes: 'build/**'
+                        )
                     }
                 }
             }
@@ -41,7 +50,12 @@ pipeline {
             parallel {
                 stage('Html report') {
                     steps {
-                        sh 'php phpmetrics.phar --junit=build/logs/junit.xml --report-html=build/phpmetrics/ ./'
+                        sh 'ls -l build'
+                        sh 'ls -l build/logs'
+                        unstash 'phpunit_output'
+                        sh 'ls -l build'
+                        sh 'ls -l build/logs'
+                        sh 'php phpmetrics.phar --junit=build/logs/junit.xml --report-html=build/phpmetrics/ ./ || exit 0'
                         script {
                             publishHTML(target: [
                                     allowMissing         : false,
