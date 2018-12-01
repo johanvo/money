@@ -24,17 +24,12 @@ pipeline {
 
         stage('Testing') {
             parallel {
-                stage('PHP Syntax check') {
-                    steps {
-                        sh 'parallel-lint --exclude vendor/ .'
-                    }
-                }
                 stage('Test') {
                     agent {
                         label 'do-the-thing'
                     }
                     steps {
-                        sh 'docker run -u `id -u`:`id -g` -v $(pwd):/app --rm phpunit/phpunit -c /build/phpunit.xml'
+                        sh 'docker run -u `id -u`:`id -g` -v $(pwd):/app --rm phpunit/phpunit -c build/phpunit.xml'
                         sh 'ls -l build'
                         sh 'ls -l build/logs'
                         stash (
