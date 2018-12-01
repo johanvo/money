@@ -29,7 +29,9 @@ pipeline {
                         label 'do-the-thing'
                     }
                     steps {
-                        sh 'docker run -u `id -u`:`id -g` -v $(pwd):/app --rm phpunit/phpunit -c build/phpunit.xml'
+                        sh 'docker run -u `id -u`:`id -g` ' +
+                                '-v $(pwd):/tmp/phpunit_base_dir --workdir /tmp/phpunit_base_dir --rm ' +
+                                'phpunit/phpunit -c build/phpunit.xml'
                         sh 'ls -l build'
                         sh 'ls -l build/logs'
                         stash (
@@ -50,7 +52,14 @@ pipeline {
                         unstash 'phpunit_output'
                         sh 'ls -l build'
                         sh 'ls -l build/logs'
+                        /*
+                        * Needs a temporary mount point in /tmp, because as PHPUnit runs inside Docker it generates
+                        * reports with non-portable, absolute paths to the analyzed class files in them.
+                        * The effect is that PhpMetrics cannot find the files when ran outside PHPUnits docker file.
+                        */
+                        sh 'ln -s $(pwd) /tmp/phpunit_base_dir'
                         sh 'php phpmetrics.phar --junit=build/logs/junit.xml --report-html=build/phpmetrics/ ./ || exit 0'
+                        sh 'rm /tmp/phpunit_base_dir'
                         script {
                             publishHTML(target: [
                                     allowMissing         : false,
