@@ -52,7 +52,7 @@ pipeline {
                                         failureNewThreshold: '0',
                                         failureThreshold: '1',
                                         unstableNewThreshold: '0',
-                                        unstableThreshold: '0'
+                                        unstableThreshold: '1'
                                 )
                         ], tools: [
                                 PHPUnit(
