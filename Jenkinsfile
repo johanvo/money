@@ -7,17 +7,8 @@ pipeline {
         stage('Prepare') {
             steps {
                 sh '/home/jenkins/composer.phar install'
-                sh 'rm -rf build/api'
-                sh 'rm -rf build/coverage'
-                sh 'rm -rf build/logs'
-                sh 'rm -rf build/pdepend'
-                sh 'rm -rf build/phpdox'
-                sh 'mkdir build/api'
-                sh 'mkdir build/coverage'
-                sh 'mkdir build/logs'
-                sh 'mkdir build/pdepend'
-                sh 'mkdir build/phpdox'
-                sh 'mkdir build/phpmetrics'
+                sh 'rm -rf build/reports'
+                sh 'mkdir build/reports'
                 sh 'wget https://github.com/phpmetrics/PhpMetrics/blob/master/build/phpmetrics.phar?raw=true -Ophpmetrics.phar'
             }
         }
@@ -58,7 +49,7 @@ pipeline {
                                 PHPUnit(
                                         deleteOutputFiles: false,
                                         failIfNotNew: true,
-                                        pattern: 'build/logs/junit.xml',
+                                        pattern: 'build/reports/junit.xml',
                                         skipNoTestFiles: true,
                                         stopProcessingIfError: true
                                 )
@@ -67,27 +58,27 @@ pipeline {
                 }
                 stage('Checkstyle') {
                     steps {
-                        sh 'phpcs --report=checkstyle --report-file=`pwd`/build/logs/checkstyle.xml --standard=PSR2 --extensions=php --ignore=autoload.php,vendor/* . || exit 0'
+                        sh 'phpcs --report=checkstyle --report-file=`pwd`/build/reports/checkstyle.xml --standard=PSR2 --extensions=php --ignore=autoload.php,vendor/* . || exit 0'
                     }
                 }
                 stage('Lines of Code') {
                     steps {
-                        sh 'phploc --count-tests --exclude vendor/ --log-csv build/logs/phploc.csv --log-xml build/logs/phploc.xml .'
+                        sh 'phploc --count-tests --exclude vendor/ --log-csv build/reports/phploc.csv --log-xml build/reports/phploc.xml .'
                     }
                 }
                 stage('Copy paste detection') {
                     steps {
-                        sh 'phpcpd --log-pmd build/logs/pmd-cpd.xml --exclude vendor . || exit 0'
+                        sh 'phpcpd --log-pmd build/reports/pmd-cpd.xml --exclude vendor . || exit 0'
                     }
                 }
                 stage('Dependency charts') {
                     steps {
-                        sh 'pdepend --jdepend-xml=build/logs/jdepend.xml --jdepend-chart=build/pdepend/dependencies.svg --overview-pyramid=build/pdepend/overview-pyramid.svg --ignore=vendor .'
+                        sh 'pdepend --jdepend-xml=build/reports/pdepend/jdepend.xml --jdepend-chart=build/reports/pdepend/dependencies.svg --overview-pyramid=build/reports/pdepend/overview-pyramid.svg --ignore=vendor .'
                     }
                 }
                 stage('Mess detection') {
                     steps {
-                        sh 'phpmd . xml build/phpmd.xml --reportfile build/logs/pmd.xml --exclude vendor/ || exit 0'
+                        sh 'phpmd . xml build/reports/phpmd.xml --reportfile build/reports/pmd.xml --exclude vendor/ || exit 0'
                     }
                 }
             }
@@ -104,14 +95,14 @@ pipeline {
                         * The effect is that PhpMetrics cannot find the files when ran outside PHPUnits docker file.
                         */
                         sh 'ln -s $(pwd) /tmp/phpunit_base_dir'
-                        sh 'php phpmetrics.phar --junit=build/logs/junit.xml --report-html=build/phpmetrics/ ./ || exit 0'
+                        sh 'php phpmetrics.phar --junit=build/reports/junit.xml --report-html=build/reports/phpmetrics/ ./ || exit 0'
                         sh 'rm /tmp/phpunit_base_dir'
                         script {
                             publishHTML(target: [
                                     allowMissing         : false,
                                     alwaysLinkToLastBuild: false,
                                     keepAll              : true,
-                                    reportDir            : 'build/phpmetrics/',
+                                    reportDir            : 'build/reports/phpmetrics/',
                                     reportFiles          : '*',
                                     reportTitles         : "",
                                     reportName           : "PhpMetrics"
@@ -121,7 +112,7 @@ pipeline {
                 }
                 stage('Violations report') {
                     steps {
-                        sh 'php phpmetrics.phar --report-violations=build/logs/phpmetrics-violations.xml ./'
+                        sh 'php phpmetrics.phar --report-violations=build/reports/phpmetrics-violations.xml ./'
                     }
                 }
 
@@ -167,13 +158,13 @@ pipeline {
                     aggregatingResults: true,
                     enabledForFailure: true,
                     tools: [
-                            [id: 'checkstyle-uniq-id', pattern: 'build/logs/checkstyle.xml', tool: checkStyle()],
-                            [id: 'php-cpd-uniq-id', pattern: 'build/logs/pmd-cpd.xml', tool: cpd()],
-                            [id: 'pmd-uniq-id', pattern: 'build/logs/pmd.xml', tool: [$class: 'Pmd']]
+                            [id: 'checkstyle-uniq-id', pattern: 'build/reports/checkstyle.xml', tool: checkStyle()],
+                            [id: 'php-cpd-uniq-id', pattern: 'build/reports/pmd-cpd.xml', tool: cpd()],
+                            [id: 'pmd-uniq-id', pattern: 'build/reports/pmd.xml', tool: [$class: 'Pmd']]
                     ]
             )
             archiveArtifacts 'src/'
-            archiveArtifacts 'build/'
+            archiveArtifacts 'build/reports/'
         }
         success {
             slackSend(

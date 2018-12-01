@@ -14,11 +14,11 @@
     </testsuite>
 
     <logging>
-        <log type="coverage-html" target="coverage"/>
-        <log type="coverage-clover" target="logs/clover.xml"/>
-        <log type="coverage-crap4j" target="logs/crap4j.xml"/>
-        <log type="coverage-xml" target="logs/coverage"/>
-        <log type="junit" target="logs/junit.xml"/>
+        <log type="coverage-html" target="reports/coverage-html"/>
+        <log type="coverage-clover" target="reports/clover.xml"/>
+        <log type="coverage-crap4j" target="reports/crap4j.xml"/>
+        <log type="coverage-xml" target="reports/coverage-xml"/>
+        <log type="junit" target="reports/junit.xml"/>
     </logging>
 
     <filter>
