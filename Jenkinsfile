@@ -37,8 +37,6 @@ pipeline {
                         sh 'docker run -u `id -u`:`id -g` ' +
                                 '-v $(pwd):/tmp/phpunit_base_dir --workdir /tmp/phpunit_base_dir --rm ' +
                                 'phpunit/phpunit -c build/phpunit.xml'
-                        sh 'ls -l build'
-                        sh 'ls -l build/logs'
                         stash (
                                 name: 'phpunit_output',
                                 includes: 'build/**'
@@ -99,11 +97,7 @@ pipeline {
             parallel {
                 stage('Html report') {
                     steps {
-                        sh 'ls -l build'
-                        sh 'ls -l build/logs'
                         unstash 'phpunit_output'
-                        sh 'ls -l build'
-                        sh 'ls -l build/logs'
                         /*
                         * Needs a temporary mount point in /tmp, because as PHPUnit runs inside Docker it generates
                         * reports with non-portable, absolute paths to the analyzed class files in them.
