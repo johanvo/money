@@ -87,16 +87,6 @@ pipeline {
 
         stage('PHP Metrics') {
             parallel {
-                stage('Version') {
-                    steps {
-                        sh 'php phpmetrics.phar --version'
-                    }
-                }
-                stage('Help') {
-                    steps {
-                        sh 'php phpmetrics.phar --help'
-                    }
-                }
                 stage('Html report') {
                     steps {
                         sh 'php phpmetrics.phar --junit=build/logs/junit.xml --report-html=build/phpmetrics/ ./'
@@ -111,25 +101,6 @@ pipeline {
                                     reportName           : "PhpMetrics"
                             ])
                         }
-                    }
-                }
-                stage('Xml report') {
-                    steps {
-                        sh 'php phpmetrics.phar --report-xml=build/logs/phpmetrics.xml ./'
-                        plot (
-                                csvFileName: 'phpmetrics-maintainability.csv',
-                                group: 'Maintainability index',
-                                style: 'line',
-                                title: 'Maintainability index',
-                                xmlSeries: [
-                                        [
-                                                file: 'build/log/phpmetrics.xml',
-                                                nodeType: 'NUMBER',
-                                                url: '',
-                                                xpath: 'number(//project/@maintabilityIndex)'
-                                        ]
-                                ]
-                        )
                     }
                 }
                 stage('Violations report') {
