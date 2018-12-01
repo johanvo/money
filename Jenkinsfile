@@ -80,7 +80,7 @@ pipeline {
                         sh 'phpcpd --log-pmd build/logs/pmd-cpd.xml --exclude vendor . || exit 0'
                     }
                 }
-                stage('Software metrics') {
+                stage('Dependency charts') {
                     steps {
                         sh 'pdepend --jdepend-xml=build/logs/jdepend.xml --jdepend-chart=build/pdepend/dependencies.svg --overview-pyramid=build/pdepend/overview-pyramid.svg --ignore=vendor .'
                     }
