@@ -6,13 +6,6 @@ pipeline {
     stages {
         stage('Prepare') {
             steps {
-                slackSend(
-                        baseUrl: 'https://queepjes.slack.com/services/hooks/jenkins-ci/',
-                        channel: '#random',
-                        color: 'danger',
-                        message: "$CHANGE_ID",
-                        token: 'TtRWVQlN5ABkGPJobVrsbgKH'
-                )
                 sh '/home/jenkins/composer.phar install'
                 sh 'rm -rf build/reports'
                 sh 'mkdir build/reports'
@@ -36,29 +29,31 @@ pipeline {
         always {
             archiveArtifacts 'src/'
             archiveArtifacts 'build/reports/'
-            step([
-                    $class: 'ViolationsToGitHubRecorder',
-                    config: [
-                            gitHubUrl: 'https://api.github.com/',
-                            repositoryOwner: 'johanvo',
-                            repositoryName: 'money',
-                            pullRequestId: '$CHANGE_ID',
+            if (env.CHANGE_ID) {
+                step([
+                        $class: 'ViolationsToGitHubRecorder',
+                        config: [
+                                gitHubUrl: 'https://api.github.com/',
+                                repositoryOwner: 'johanvo',
+                                repositoryName: 'money',
+                                pullRequestId: '$CHANGE_ID',
 
-                            // Only specify one of these!
-                            oAuth2Token: ' 09036ea7261b6c8ae25e45315d18b0f00368c628',
-                            // github-comment-oauth-access-token
+                                // Only specify one of these!
+                                oAuth2Token: ' 09036ea7261b6c8ae25e45315d18b0f00368c628',
+                                // github-comment-oauth-access-token
 
-                            createCommentWithAllSingleFileComments: true,
-                            createSingleFileComments: true,
-                            commentOnlyChangedContent: true,
-                            minSeverity: 'INFO',
-                            keepOldComments: false,
-                            violationConfigs: [
-                                    [ pattern: 'build/reports/checkstyle.xml', parser: 'CHECKSTYLE', reporter: 'Checkstyle' ],
-                                    [ pattern: 'build/reports/phpmetrics-violations.xml', parser: 'PMD', reporter: 'PMD' ],
-                            ]
-                    ]
-            ])
+                                createCommentWithAllSingleFileComments: true,
+                                createSingleFileComments: true,
+                                commentOnlyChangedContent: true,
+                                minSeverity: 'INFO',
+                                keepOldComments: false,
+                                violationConfigs: [
+                                        [ pattern: 'build/reports/checkstyle.xml', parser: 'CHECKSTYLE', reporter: 'Checkstyle' ],
+                                        [ pattern: 'build/reports/phpmetrics-violations.xml', parser: 'PMD', reporter: 'PMD' ],
+                                ]
+                        ]
+                ])
+            }
         }
     }
 }
