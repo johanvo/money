@@ -49,8 +49,8 @@ pipeline {
                                 minSeverity: 'INFO',
                                 keepOldComments: false,
                                 violationConfigs: [
-                                        [ pattern: 'build/reports/checkstyle.xml', parser: 'CHECKSTYLE', reporter: 'Checkstyle' ],
-                                        [ pattern: 'build/reports/phpmetrics-violations.xml', parser: 'PMD', reporter: 'PMD' ],
+                                        [ pattern: '.*build/reports/checkstyle\\.xml\$', parser: 'CHECKSTYLE', reporter: 'Checkstyle' ],
+                                        [ pattern: '.*build/reports/phpmetrics-violations\\.xml\$', parser: 'PMD', reporter: 'PMD' ],
                                         [ pattern: '.*build/pmd\\.xml\$', parser: 'PMD', reporter: 'PMD' ],
                                 ]
                         ]
