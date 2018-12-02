@@ -25,7 +25,7 @@ pipeline {
         }
         stage('Comment on Github PR') {
             when {
-                changeRequest
+                changeRequest()
             }
             steps {
                 step([
