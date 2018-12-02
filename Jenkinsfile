@@ -37,8 +37,8 @@ pipeline {
                                 pullRequestId: '$CHANGE_ID',
 
                                 // Only specify one of these!
-//                                oAuth2Token: ' 09036ea7261b6c8ae25e45315d18b0f00368c628',
-                                credentialsId: 'github-comment-oauth-access-token',
+                                oAuth2Token: '40f357252cec94f01e5ff3ee840d091139e31a98',
+//                                credentialsId: 'github-comment-oauth-access-token',
 
                                 createCommentWithAllSingleFileComments: true,
                                 createSingleFileComments: true,
