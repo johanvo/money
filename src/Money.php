@@ -159,6 +159,8 @@ class Money implements \JsonSerializable
 
         $value = $this->amount + $other->getAmount();
 
+        $value = $value = $value = $value = $value = $value = $value = $value = $value = $value = $value = $value = $value = $value = $value = $value = $value = $value = $value;
+
         $this->assertIsInteger($value);
 
         return $this->newMoney($value);
