@@ -42,7 +42,7 @@ pipeline {
 
                                 createCommentWithAllSingleFileComments: true,
                                 createSingleFileComments: true,
-                                commentOnlyChangedContent: true,
+                                commentOnlyChangedContent: false,
                                 minSeverity: 'INFO',
                                 keepOldComments: false,
                                 violationConfigs: [
