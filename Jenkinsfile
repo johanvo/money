@@ -7,8 +7,10 @@ pipeline {
         stage('Prepare') {
             steps {
                 sh '/home/jenkins/composer.phar install'
+                sh 'rm -rf build/reports/pdepend'
                 sh 'rm -rf build/reports'
                 sh 'mkdir build/reports'
+                sh 'mkdir build/reports/pdepend'
                 sh 'wget https://github.com/phpmetrics/PhpMetrics/blob/master/build/phpmetrics.phar?raw=true -Ophpmetrics.phar'
             }
         }
