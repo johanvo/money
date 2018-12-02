@@ -53,6 +53,7 @@ pipeline {
         }
 
         stage('2 - Quality check') {
+            failFast true
             parallel {
                 stage('PHP Syntax check') {
                     steps {
