@@ -4,7 +4,7 @@ pipeline {
         PATH = "$PATH:/home/jenkins/vendor/bin/"
     }
     stages {
-        stage('Prepare') {
+        stage('0 - Setup') {
             steps {
                 sh '/home/jenkins/composer.phar install'
                 sh 'rm -rf build/reports'
@@ -13,7 +13,7 @@ pipeline {
             }
         }
 
-        stage('Test') {
+        stage('1 - Testing') {
             agent {
                 label 'do-the-thing'
             }
@@ -50,7 +50,7 @@ pipeline {
             }
         }
 
-        stage('Quality checks') {
+        stage('2 - Quality check') {
             parallel {
                 stage('PHP Syntax check') {
                     steps {
@@ -114,7 +114,7 @@ pipeline {
             }
         }
 
-        stage('Deliver') {
+        stage('3 - Delivery') {
             steps {
                 sshPublisher(
                         publishers: [
@@ -146,7 +146,8 @@ pipeline {
                 )
             }
         }
-        stage('Comment on Github PR') {
+
+        stage('4 - Comment on Github PR') {
             when {
                 changeRequest()
             }
