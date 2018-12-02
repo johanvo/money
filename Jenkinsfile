@@ -44,7 +44,7 @@ pipeline {
                                 credentialsId: 'github-comment-oauth-access-token',
 
                                 createCommentWithAllSingleFileComments: false,
-                                createSingleFileComments: false,
+                                createSingleFileComments: true,
                                 commentOnlyChangedContent: false,
                                 minSeverity: 'INFO',
                                 keepOldComments: false,
