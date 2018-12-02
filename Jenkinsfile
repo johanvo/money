@@ -23,37 +23,40 @@ pipeline {
 
             }
         }
+        stage('Comment on Github PR') {
+            when {
+                changeRequest
+            }
+            step([
+                    $class: 'ViolationsToGitHubRecorder',
+                    config: [
+                            gitHubUrl: 'https://api.github.com/',
+                            repositoryOwner: 'johanvo',
+                            repositoryName: 'money',
+                            pullRequestId: '$CHANGE_ID',
+
+                            // Only specify one of these!
+                            oAuth2Token: ' 09036ea7261b6c8ae25e45315d18b0f00368c628',
+                            // github-comment-oauth-access-token
+
+                            createCommentWithAllSingleFileComments: true,
+                            createSingleFileComments: true,
+                            commentOnlyChangedContent: true,
+                            minSeverity: 'INFO',
+                            keepOldComments: false,
+                            violationConfigs: [
+                                    [ pattern: 'build/reports/checkstyle.xml', parser: 'CHECKSTYLE', reporter: 'Checkstyle' ],
+                                    [ pattern: 'build/reports/phpmetrics-violations.xml', parser: 'PMD', reporter: 'PMD' ],
+                            ]
+                    ]
+            ])
+        }
     }
 
     post {
         always {
             archiveArtifacts 'src/'
             archiveArtifacts 'build/reports/'
-            if (env.CHANGE_ID) {
-                step([
-                        $class: 'ViolationsToGitHubRecorder',
-                        config: [
-                                gitHubUrl: 'https://api.github.com/',
-                                repositoryOwner: 'johanvo',
-                                repositoryName: 'money',
-                                pullRequestId: '$CHANGE_ID',
-
-                                // Only specify one of these!
-                                oAuth2Token: ' 09036ea7261b6c8ae25e45315d18b0f00368c628',
-                                // github-comment-oauth-access-token
-
-                                createCommentWithAllSingleFileComments: true,
-                                createSingleFileComments: true,
-                                commentOnlyChangedContent: true,
-                                minSeverity: 'INFO',
-                                keepOldComments: false,
-                                violationConfigs: [
-                                        [ pattern: 'build/reports/checkstyle.xml', parser: 'CHECKSTYLE', reporter: 'Checkstyle' ],
-                                        [ pattern: 'build/reports/phpmetrics-violations.xml', parser: 'PMD', reporter: 'PMD' ],
-                                ]
-                        ]
-                ])
-            }
         }
     }
 }
