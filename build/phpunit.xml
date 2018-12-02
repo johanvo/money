@@ -11,6 +11,7 @@
          verbose="true">
     <testsuite name="Money">
         <directory>../tests</directory>
+        <exclude>../tests/IntlFormatterTest.php</exclude>
     </testsuite>
 
     <logging>
