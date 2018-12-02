@@ -36,8 +36,6 @@ pipeline {
                                 repositoryName: 'money',
                                 pullRequestId: '$CHANGE_ID',
 
-                                // Only specify one of these!
-//                                oAuth2Token: '40f357252cec94f01e5ff3ee840d091139e31a98',
                                 credentialsId: 'github-comment-oauth-access-token',
 
                                 createCommentWithAllSingleFileComments: true,
