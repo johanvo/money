@@ -117,6 +117,9 @@ pipeline {
         }
 
         stage('3 - Delivery') {
+            when {
+                branch 'master'
+            }
             steps {
                 sshPublisher(
                         publishers: [
