@@ -13,47 +13,48 @@ pipeline {
             }
         }
 
-        stage('Testing') {
+        stage('Test') {
+            agent {
+                label 'do-the-thing'
+            }
+            steps {
+                sh 'docker run -u `id -u`:`id -g` ' +
+                        '-v $(pwd):/tmp/phpunit_base_dir --workdir /tmp/phpunit_base_dir --rm ' +
+                        'phpunit/phpunit -c build/phpunit.xml'
+                stash (
+                        name: 'phpunit_output',
+                        includes: 'build/**'
+                )
+                xunit(thresholds: [
+                        failed(
+                                failureNewThreshold: '0',
+                                failureThreshold: '0',
+                                unstableNewThreshold: '0',
+                                unstableThreshold: '0'
+                        ),
+                        skipped(
+                                failureNewThreshold: '0',
+                                failureThreshold: '1',
+                                unstableNewThreshold: '0',
+                                unstableThreshold: '1'
+                        )
+                ], tools: [
+                        PHPUnit(
+                                deleteOutputFiles: false,
+                                failIfNotNew: true,
+                                pattern: 'build/reports/junit.xml',
+                                skipNoTestFiles: true,
+                                stopProcessingIfError: true
+                        )
+                ])
+            }
+        }
+
+        stage('Quality checks') {
             parallel {
                 stage('PHP Syntax check') {
                     steps {
                         sh 'parallel-lint --exclude vendor/ .'
-                    }
-                }
-                stage('Test') {
-                    agent {
-                        label 'do-the-thing'
-                    }
-                    steps {
-                        sh 'docker run -u `id -u`:`id -g` ' +
-                                '-v $(pwd):/tmp/phpunit_base_dir --workdir /tmp/phpunit_base_dir --rm ' +
-                                'phpunit/phpunit -c build/phpunit.xml'
-                        stash (
-                                name: 'phpunit_output',
-                                includes: 'build/**'
-                        )
-                        xunit(thresholds: [
-                                failed(
-                                        failureNewThreshold: '0',
-                                        failureThreshold: '0',
-                                        unstableNewThreshold: '0',
-                                        unstableThreshold: '0'
-                                ),
-                                skipped(
-                                        failureNewThreshold: '0',
-                                        failureThreshold: '1',
-                                        unstableNewThreshold: '0',
-                                        unstableThreshold: '1'
-                                )
-                        ], tools: [
-                                PHPUnit(
-                                        deleteOutputFiles: false,
-                                        failIfNotNew: true,
-                                        pattern: 'build/reports/junit.xml',
-                                        skipNoTestFiles: true,
-                                        stopProcessingIfError: true
-                                )
-                        ])
                     }
                 }
                 stage('Checkstyle') {
@@ -61,32 +62,7 @@ pipeline {
                         sh 'phpcs --report=checkstyle --report-file=`pwd`/build/reports/checkstyle.xml --standard=PSR2 --extensions=php --ignore=autoload.php,vendor/* . || exit 0'
                     }
                 }
-                stage('Lines of Code') {
-                    steps {
-                        sh 'phploc --count-tests --exclude vendor/ --log-csv build/reports/phploc.csv --log-xml build/reports/phploc.xml .'
-                    }
-                }
-                stage('Copy paste detection') {
-                    steps {
-                        sh 'phpcpd --log-pmd build/reports/pmd-cpd.xml --exclude vendor . || exit 0'
-                    }
-                }
-                stage('Dependency charts') {
-                    steps {
-                        sh 'pdepend --jdepend-xml=build/reports/pdepend/jdepend.xml --jdepend-chart=build/reports/pdepend/dependencies.svg --overview-pyramid=build/reports/pdepend/overview-pyramid.svg --ignore=vendor .'
-                    }
-                }
-                stage('Mess detection') {
-                    steps {
-                        sh 'phpmd . xml build/reports/phpmd.xml --reportfile build/reports/pmd.xml --exclude vendor/ || exit 0'
-                    }
-                }
-            }
-        }
-
-        stage('PHP Metrics') {
-            parallel {
-                stage('Html report') {
+                stage('PhpMetrics') {
                     steps {
                         unstash 'phpunit_output'
                         /*
@@ -115,7 +91,26 @@ pipeline {
                         sh 'php phpmetrics.phar --report-violations=build/reports/phpmetrics-violations.xml ./'
                     }
                 }
-
+                stage('Lines of Code') {
+                    steps {
+                        sh 'phploc --count-tests --exclude vendor/ --log-csv build/reports/phploc.csv --log-xml build/reports/phploc.xml .'
+                    }
+                }
+                stage('Copy paste detection') {
+                    steps {
+                        sh 'phpcpd --log-pmd build/reports/pmd-cpd.xml --exclude vendor . || exit 0'
+                    }
+                }
+                stage('Dependency charts') {
+                    steps {
+                        sh 'pdepend --jdepend-xml=build/reports/pdepend/jdepend.xml --jdepend-chart=build/reports/pdepend/dependencies.svg --overview-pyramid=build/reports/pdepend/overview-pyramid.svg --ignore=vendor .'
+                    }
+                }
+                stage('Mess detection') {
+                    steps {
+                        sh 'phpmd . xml build/reports/phpmd.xml --reportfile build/reports/pmd.xml --exclude vendor/ || exit 0'
+                    }
+                }
             }
         }
 
