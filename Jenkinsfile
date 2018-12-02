@@ -15,6 +15,11 @@ pipeline {
 
         stage('PHP Metrics') {
             parallel {
+                stage('Checkstyle') {
+                    steps {
+                        sh 'phpcs --report=checkstyle --report-file=`pwd`/build/reports/checkstyle.xml --standard=PSR2 --extensions=php --ignore=autoload.php,vendor/* . || exit 0'
+                    }
+                }
                 stage('Violations report') {
                     steps {
                         sh 'php phpmetrics.phar --report-violations=build/reports/phpmetrics-violations.xml ./'
