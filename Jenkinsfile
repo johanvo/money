@@ -1,5 +1,8 @@
 pipeline {
     agent any
+    options {
+        parallelsAlwaysFailFast()
+    }
     environment {
         PATH = "$PATH:/home/jenkins/vendor/bin/"
     }
