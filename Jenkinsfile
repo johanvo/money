@@ -1,8 +1,5 @@
 pipeline {
     agent any
-    options {
-        parallelsAlwaysFailFast()
-    }
     environment {
         PATH = "$PATH:/home/jenkins/vendor/bin/"
     }
@@ -56,6 +53,7 @@ pipeline {
         }
 
         stage('2 - Quality check') {
+            failFast true
             parallel {
                 stage('PHP Syntax check') {
                     steps {
